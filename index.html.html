@@ -1,273 +1,174 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trivora - Gerenciamento, Marketing e Negócios</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'blue-dark': '#0B2545',
-            'blue-light': '#1E3A8A',
-          },
-          fontFamily: {
-            sans: ['Inter', 'ui-sans-serif', 'system-ui'],
-          }
-        }
-      }
-    }
-  </script>
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <title>Trivora - Gerenciamento e Marketing</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    .fade-in { animation: fadeIn 0.5s ease-in; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .hover-scale { transition: transform 0.25s ease, box-shadow 0.25s ease; }
-    .hover-scale:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(2,6,23,0.12); }
-    .hidden-scroll { max-height: 60vh; overflow:auto; padding-right:8px; }
-    .active-link { color: #93c5fd; font-weight:600; }
+    /* Efeito visual no mapa */
+    .map-container {
+      border: 4px solid #1e3a8a;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      animation: pulse-border 2s infinite;
+    }
+    @keyframes pulse-border {
+      0% { box-shadow: 0 0 10px rgba(30,58,138,0.5); }
+      50% { box-shadow: 0 0 25px rgba(30,58,138,1); }
+      100% { box-shadow: 0 0 10px rgba(30,58,138,0.5); }
+    }
   </style>
+  <script>
+    const siteConfig = {
+      siteName: "Trivora",
+      email: "trivoraorg@gmail.com",
+      telefone: "926115429",
+      endereco: "Luanda, Angola",
+      mapa: "https://maps.app.goo.gl/kiRAKnArnoc7DGKKA",
+
+      sobre: {
+        historia: "A Trivora foi oficialmente constituída em 2024 e iniciou operações ativas no mês passado. Trabalhamos para oferecer serviços de gerenciamento, marketing e consultoria.",
+        missao: "Capacitar empresas com estratégias pragmáticas e execução de alto impacto para alcançar crescimento sustentável.",
+        visao: "Ser a parceira de referência para empresas que procuram excelência operacional e presença de mercado relevante.",
+        valores: [
+          "Integridade e transparência",
+          "Foco em resultados",
+          "Inovação aplicada",
+          "Empatia pelo cliente"
+        ]
+      },
+
+      equipa: [
+        { nome: "Matias Domingos", cargo: "CEO", img: "img/ceo.jpg" }
+      ],
+
+      servicos: [
+        {
+          nome: "Gerenciamento Empresarial",
+          intro: "Planeamento operacional, reorganização de processos e melhoria contínua.",
+          subsecoes: [
+            { titulo: "Diagnóstico Operacional", texto: "Mapeamos processos e identificamos gargalos." },
+            { titulo: "Reengenharia de Processos", texto: "Redesenho para aumentar eficiência." },
+            { titulo: "Gestão Financeira & KPI", texto: "Indicadores e controlo financeiro para decisões rápidas." }
+          ]
+        },
+        {
+          nome: "Marketing Digital",
+          intro: "Estratégias para presença online, aquisição de clientes e posicionamento de marca.",
+          subsecoes: [
+            { titulo: "SEO & Conteúdo", texto: "Foco em tráfego orgânico e autoridade de marca." },
+            { titulo: "Performance Ads", texto: "Campanhas pagas com otimização de ROI." },
+            { titulo: "Social Media & Community", texto: "Construção de comunidade e funil de vendas." }
+          ]
+        },
+        {
+          nome: "Consultoria de Negócios",
+          intro: "Análises para expansão, avaliação de oportunidades e entrada em novos mercados.",
+          subsecoes: [
+            { titulo: "Estudo de Mercado", texto: "Pesquisa e análise competitiva." },
+            { titulo: "Modelos de Negócio", texto: "Validação e ajuste do modelo de receita." },
+            { titulo: "Planeamento Estratégico", texto: "Roadmap de 12-24 meses com metas e recursos." }
+          ]
+        }
+      ]
+    };
+  </script>
 </head>
-<body class="bg-white text-blue-dark font-sans antialiased">
+<body class="bg-gray-50 text-gray-900">
 
   <!-- Header -->
-  <header class="bg-blue-dark text-white fixed w-full z-50 shadow-lg">
-    <div class="container mx-auto flex justify-between items-center p-4">
-      <h1 id="logo" class="text-2xl font-bold cursor-pointer" onclick="showPage('home')">Trivora</h1>
-      <nav class="hidden md:flex space-x-6 items-center">
-        <button class="nav-link hover:text-blue-light" onclick="showPage('home')">Home</button>
-        <button class="nav-link hover:text-blue-light" onclick="showPage('about')">Sobre Nós</button>
-        <button class="nav-link hover:text-blue-light" onclick="showPage('services')">Serviços</button>
-        <button class="nav-link hover:text-blue-light" onclick="showPage('blog')">Blog</button>
-        <button class="nav-link hover:text-blue-light" onclick="showPage('contact')">Contactos</button>
-        <button class="nav-link hover:text-blue-light" onclick="showPage('login')">Login</button>
-      </nav>
-
-      <div class="hidden md:block">
-        <button onclick="showPage('contact')" class="bg-white text-blue-dark font-semibold px-4 py-2 rounded-full shadow hover-scale">Solicitar Orçamento</button>
-      </div>
-
-      <!-- Mobile menu button -->
-      <button id="mobile-menu-btn" class="md:hidden focus:outline-none ml-4" onclick="toggleMobileMenu()">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-          <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          <path id="close-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" style="display: none;" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="md:hidden hidden bg-blue-dark/95">
-      <ul class="py-4 space-y-2 text-center">
-        <li><button onclick="showPage('home'); toggleMobileMenu();" class="block w-full py-2 text-white">Home</button></li>
-        <li><button onclick="showPage('about'); toggleMobileMenu();" class="block w-full py-2 text-white">Sobre Nós</button></li>
-        <li><button onclick="showPage('services'); toggleMobileMenu();" class="block w-full py-2 text-white">Serviços</button></li>
-        <li><button onclick="showPage('blog'); toggleMobileMenu();" class="block w-full py-2 text-white">Blog</button></li>
-        <li><button onclick="showPage('contact'); toggleMobileMenu();" class="block w-full py-2 text-white">Contactos</button></li>
-        <li><button onclick="showPage('login'); toggleMobileMenu();" class="block w-full py-2 text-white">Login</button></li>
-      </ul>
-    </div>
+  <header class="bg-blue-900 text-white p-4 text-center text-2xl font-bold">
+    Trivora - Gerenciamento e Marketing
   </header>
 
-  <!-- Main -->
-  <main id="main" class="pt-24">
+  <!-- Sobre Nós -->
+  <section class="p-8 text-center">
+    <h2 class="text-3xl font-bold mb-4">Sobre Nós</h2>
+    <p id="historia-texto" class="mb-4"></p>
+    <h3 class="text-xl font-semibold">Missão</h3>
+    <p id="missao-texto" class="mb-4"></p>
+    <h3 class="text-xl font-semibold">Visão</h3>
+    <p id="visao-texto" class="mb-4"></p>
+    <h3 class="text-xl font-semibold">Valores</h3>
+    <ul id="valores-lista" class="list-disc list-inside mb-4"></ul>
+  </section>
 
-    <!-- HOME -->
-    <section id="home" class="page bg-gradient-to-b from-blue-dark to-blue-light text-white min-h-screen py-16 px-4">
-      <div class="container mx-auto text-center">
-        <h1 class="text-5xl font-bold mb-4 fade-in">Trivora — Gerenciamento, Marketing e Negócios</h1>
-        <p class="max-w-3xl mx-auto mb-6 text-xl">Soluções estratégicas e execução prática para empresas que querem crescer com método.</p>
-        <div class="flex justify-center gap-4">
-          <button onclick="showPage('services')" class="bg-white text-blue-dark font-semibold px-6 py-3 rounded-full shadow hover-scale">Nossos Serviços</button>
-          <button onclick="showPage('contact')" class="border border-white px-6 py-3 rounded-full hover:opacity-90">Contacte-nos</button>
-        </div>
+  <!-- Equipa -->
+  <section class="p-8 bg-white text-center">
+    <h2 class="text-3xl font-bold mb-4">Nossa Equipa</h2>
+    <div id="equipa-container" class="grid md:grid-cols-3 gap-6"></div>
+  </section>
 
-        <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="bg-white bg-opacity-15 p-6 rounded-lg hover-scale text-left">
-            <h3 class="text-xl font-semibold mb-2">Gerenciamento Empresarial</h3>
-            <p class="mb-4">Otimização de processos, operações e estruturas organizacionais para eficiência e escalabilidade.</p>
-            <button class="text-white underline" onclick="openServiceDetail('Gerenciamento Empresarial')">Saiba mais</button>
-          </div>
-          <div class="bg-white bg-opacity-15 p-6 rounded-lg hover-scale text-left">
-            <h3 class="text-xl font-semibold mb-2">Marketing Digital</h3>
-            <p class="mb-4">Estratégias de aquisição, conteúdo, anúncios e SEO para posicionamento e geração de leads.</p>
-            <button class="text-white underline" onclick="openServiceDetail('Marketing Digital')">Saiba mais</button>
-          </div>
-          <div class="bg-white bg-opacity-15 p-6 rounded-lg hover-scale text-left">
-            <h3 class="text-xl font-semibold mb-2">Consultoria de Negócios</h3>
-            <p class="mb-4">Planejamento estratégico, análise de mercado e suporte para expansão e operações financeiras.</p>
-            <button class="text-white underline" onclick="openServiceDetail('Consultoria de Negócios')">Saiba mais</button>
-          </div>
-        </div>
+  <!-- Serviços -->
+  <section class="p-8 text-center">
+    <h2 class="text-3xl font-bold mb-6">Nossos Serviços</h2>
+    <div id="servicos-container" class="grid md:grid-cols-3 gap-6"></div>
+  </section>
 
-        <!-- Quick stats -->
-        <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-black">
+  <!-- Contactos -->
+  <section class="p-8 bg-white text-center">
+    <h2 class="text-3xl font-bold mb-4">Contactos</h2>
+    <p><strong>Email:</strong> <span id="contact-email"></span></p>
+    <p><strong>Telefone:</strong> <span id="contact-phone"></span></p>
+    <p><strong>Endereço:</strong> <span id="contact-address"></span></p>
+    <div class="map-container mt-4">
+      <iframe id="contact-map" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-blue-900 text-white text-center p-4 mt-8">
+    &copy; 2025 Trivora. Todos os direitos reservados.
+  </footer>
+
+  <script>
+    function carregarConfig() {
+      // Contactos
+      document.getElementById("contact-email").innerText = siteConfig.email;
+      document.getElementById("contact-phone").innerText = siteConfig.telefone;
+      document.getElementById("contact-address").innerText = siteConfig.endereco;
+      document.getElementById("contact-map").src = siteConfig.mapa;
+
+      // Sobre
+      document.getElementById("historia-texto").innerText = siteConfig.sobre.historia;
+      document.getElementById("missao-texto").innerText = siteConfig.sobre.missao;
+      document.getElementById("visao-texto").innerText = siteConfig.sobre.visao;
+
+      // Valores
+      const valoresLista = document.getElementById("valores-lista");
+      siteConfig.sobre.valores.forEach(v => {
+        const li = document.createElement("li");
+        li.innerText = v;
+        valoresLista.appendChild(li);
+      });
+
+      // Equipa
+      const equipaContainer = document.getElementById("equipa-container");
+      siteConfig.equipa.forEach(membro => {
+        equipaContainer.innerHTML += `
+          <div class="bg-gray-100 p-4 rounded-lg shadow text-center">
+            <img src="${membro.img}" alt="${membro.nome}" class="w-32 h-32 rounded-full mx-auto mb-4">
+            <h4 class="font-semibold text-lg">${membro.nome}</h4>
+            <p>${membro.cargo}</p>
+          </div>`;
+      });
+
+      // Serviços
+      const servicosContainer = document.getElementById("servicos-container");
+      siteConfig.servicos.forEach(servico => {
+        servicosContainer.innerHTML += `
           <div class="bg-white p-6 rounded-lg shadow">
-            <h4 class="text-3xl font-bold">15+</h4>
-            <p>Trabalhadores & Parceiros</p>
-          </div>
-          <div class="bg-white p-6 rounded-lg shadow">
-            <h4 class="text-3xl font-bold">2024</h4>
-            <p>Ano de Fundação</p>
-          </div>
-          <div class="bg-white p-6 rounded-lg shadow">
-            <h4 class="text-3xl font-bold">Clientes</h4>
-            <p>Projetos de crescimento e performance</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="page hidden min-h-screen py-16 px-4 bg-white">
-      <div class="container mx-auto max-w-5xl">
-        <h2 class="text-4xl font-bold mb-6 text-center">Sobre Nós</h2>
-
-        <div class="mb-8 space-y-6">
-          <h3 class="text-2xl font-semibold">Nossa História</h3>
-          <p class="text-lg">A Trivora foi oficialmente constituída em 2024 e iniciou operações ativas no mês passado. Desde o arranque, trabalhamos para oferecer serviços de gerenciamento empresarial, marketing e consultoria com foco em resultado.</p>
-
-          <h3 class="text-2xl font-semibold">Missão</h3>
-          <p class="text-lg">Capacitar empresas com estratégias pragmáticas e execução de alto impacto para alcançar crescimento sustentável.</p>
-
-          <h3 class="text-2xl font-semibold">Visão</h3>
-          <p class="text-lg">Ser a parceira de referência para empresas que procuram excelência operacional e presença de mercado relevante.</p>
-
-          <h3 class="text-2xl font-semibold">Valores</h3>
-          <ul class="list-disc list-inside text-lg space-y-1 ml-6">
-            <li>Integridade e transparência</li>
-            <li>Foco em resultados</li>
-            <li>Inovação aplicada</li>
-            <li>Empatia pelo cliente</li>
-          </ul>
-        </div>
-
-        <h3 class="text-3xl font-semibold mb-6 text-center">Equipe Executiva</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 gap-8 justify-center max-w-xs mx-auto">
-          <!-- CEO -->
-          <div class="text-center bg-gray-100 p-6 rounded-lg hover-scale">
-            <img src="https://i.pravatar.cc/150?img=12" alt="Matias Domingos" class="w-24 h-24 rounded-full mx-auto mb-4" />
-            <h4 class="text-lg font-semibold">Matias Domingos</h4>
-            <p>CEO</p>
-            <p class="text-sm mt-2 text-gray-600">Fundador e responsável estratégico pela visão e operações.</p>
-          </div>
-        </div>
-
-        <p class="mt-6 text-gray-700">Total de colaboradores e parceiros: <strong>15</strong>.</p>
-      </div>
-    </section>
-
-    <!-- SERVICES (list + subsections) -->
-    <section id="services" class="page hidden min-h-screen py-16 px-4 bg-gray-100">
-      <div class="container mx-auto max-w-6xl">
-        <h2 class="text-4xl font-bold mb-8 text-center">Nossos Serviços</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <!-- Service cards -->
-          <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
-            <h3 class="text-xl font-semibold mb-2">Gerenciamento Empresarial</h3>
-            <p class="mb-4">Otimização de processos, controle financeiro e melhoria organizacional.</p>
-            <button class="bg-blue-dark text-white px-4 py-2 rounded" onclick="openServiceDetail('Gerenciamento Empresarial')">Ver subseções</button>
-          </div>
-
-          <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
-            <h3 class="text-xl font-semibold mb-2">Marketing Digital</h3>
-            <p class="mb-4">Estratégias de conteúdo, tráfego pago e SEO para resultados mensuráveis.</p>
-            <button class="bg-blue-dark text-white px-4 py-2 rounded" onclick="openServiceDetail('Marketing Digital')">Ver subseções</button>
-          </div>
-
-          <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
-            <h3 class="text-xl font-semibold mb-2">Consultoria de Negócios</h3>
-            <p class="mb-4">Análises, planos de crescimento e apoio para entrada em novos mercados.</p>
-            <button class="bg-blue-dark text-white px-4 py-2 rounded" onclick="openServiceDetail('Consultoria de Negócios')">Ver subseções</button>
-          </div>
-
-          <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
-            <h3 class="text-xl font-semibold mb-2">Treinamento Empresarial</h3>
-            <p class="mb-4">Capacitação da equipa em vendas, liderança e produtividade.</p>
-            <button class="bg-blue-dark text-white px-4 py-2 rounded" onclick="openServiceDetail('Treinamento Empresarial')">Ver subseções</button>
-          </div>
-
-          <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
-            <h3 class="text-xl font-semibold mb-2">Análise de Dados</h3>
-            <p class="mb-4">Dashboards e análises para decisões mais rápidas e precisas.</p>
-            <button class="bg-blue-dark text-white px-4 py-2 rounded" onclick="openServiceDetail('Análise de Dados')">Ver subseções</button>
-          </div>
-
-          <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
-            <h3 class="text-xl font-semibold mb-2">Gestão de Projetos</h3>
-            <p class="mb-4">Planeamento, execução e entrega — com foco em prazos e custos.</p>
-            <button class="bg-blue-dark text-white px-4 py-2 rounded" onclick="openServiceDetail('Gestão de Projetos')">Ver subseções</button>
-          </div>
-        </div>
-
-        <!-- Service details area (dynamic) -->
-        <div id="service-detail" class="mt-12 hidden">
-          <div class="bg-white p-6 rounded-lg shadow-lg">
-            <div class="flex justify-between items-start">
-              <div>
-                <h3 id="service-title" class="text-2xl font-bold mb-2"></h3>
-                <p id="service-intro" class="text-lg text-gray-700 mb-4"></p>
-              </div>
-              <div>
-                <button class="text-sm text-gray-500" onclick="closeServiceDetail()">Fechar</button>
-              </div>
-            </div>
-
-            <div id="service-subsections" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6 hidden-scroll"></div>
-
-            <div class="mt-6">
-              <button class="bg-blue-dark text-white px-4 py-2 rounded" onclick="showPage('contact')">Solicitar Orçamento</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BLOG -->
-    <section id="blog" class="page hidden min-h-screen py-16 px-4 bg-white">
-      <div class="container mx-auto max-w-5xl">
-        <h2 class="text-4xl font-bold mb-12 text-center">Blog</h2>
-        <div class="space-y-8">
-          <article class="bg-gray-100 p-8 rounded-lg shadow-lg hover-scale">
-            <h3 class="text-2xl font-semibold mb-4">Tendências em Marketing Digital para 2025</h3>
-            <p class="text-lg mb-4">IA aplicada, conteúdo em formatos curtos e experiência do cliente como diferencial competitivo.</p>
-            <a href="#" class="text-blue-dark font-semibold hover:underline">Leia mais...</a>
-          </article>
-
-          <article class="bg-gray-100 p-8 rounded-lg shadow-lg hover-scale">
-            <h3 class="text-2xl font-semibold mb-4">Automação para reduzir custos operacionais</h3>
-            <p class="text-lg mb-4">Como automação inteligente reduz erros e melhora produtividade em pequenas e médias empresas.</p>
-            <a href="#" class="text-blue-dark font-semibold hover:underline">Leia mais...</a>
-          </article>
-
-          <article class="bg-gray-100 p-8 rounded-lg shadow-lg hover-scale">
-            <h3 class="text-2xl font-semibold mb-4">Crescimento sustentável: priorize margem e retenção</h3>
-            <p class="text-lg mb-4">Táticas para balancear aquisição e retenção com foco em margem operacional.</p>
-            <a href="#" class="text-blue-dark font-semibold hover:underline">Leia mais...</a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="page hidden min-h-screen py-16 px-4 bg-gray-100">
-      <div class="container mx-auto max-w-4xl">
-        <h2 class="text-4xl font-bold mb-8 text-center">Contactos</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <form id="contact-form" class="bg-white p-8 rounded-lg shadow-lg">
-            <div class="mb-4">
-              <label for="name" class="block font-semibold mb-2">Nome</label>
-              <input type="text" id="name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-dark" required />
-            </div>
-            <div class="mb-4">
-              <label for="email" class="block font-semibold mb-2">Email</label>
-              <input type="email" id="email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-dark" required />
-            </div>
-            <div class="mb-4">
-              <label for="message" class="block font-semibold mb-2">Mensagem</label>
-              <textarea id="message" rows="5" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-dark" required></
+            <h3 class="text-xl font-bold mb-2">${servico.nome}</h3>
+            <p class="mb-2">${servico.intro}</p>
+            <ul class="text-left list-disc list-inside">
+              ${servico.subsecoes.map(s => `<li><strong>${s.titulo}:</strong> ${s.texto}</li>`).join("")}
+            </ul>
+          </div>`;
+      });
+    }
+    document.addEventListener("DOMContentLoaded", carregarConfig);
+  </script>
+</body>
+</html>
